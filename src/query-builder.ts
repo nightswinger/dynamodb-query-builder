@@ -6,6 +6,7 @@ export default class QueryBuilder {
   private expressionAttributeValues: any = {}
   private indexName?: string
   private keyConditionExpression: string = ''
+  private filterExpression?: string
   private limitValue: number = 0
   private scanIndexForwardValue: boolean = true
 
@@ -17,6 +18,7 @@ export default class QueryBuilder {
       KeyConditionExpression: this.keyConditionExpression,
       ScanIndexForward: this.scanIndexForwardValue
     }
+    if (this.filterExpression) result.FilterExpression = this.filterExpression
     if (this.indexName) result.IndexName = this.indexName
     if (this.limitValue > 0) result.Limit = this.limitValue
 
@@ -38,6 +40,20 @@ export default class QueryBuilder {
     const attributeValue = this.setAttributeValue(value)
 
     this.setKeyConditionExpression(attributeName, attributeValue, operator)
+
+    return this
+  }
+
+  filter(params: {[key: string]: any}) {
+    const attrs = Object.entries(params)
+    const [key, value] = attrs[0]
+
+    const [name, operator] = key.split('.')
+
+    const attributeName = this.setAttributeName(name)
+    const attributeValue = this.setAttributeValue(value)
+
+    this.setFilterExpression(attributeName, attributeValue)
 
     return this
   }
@@ -84,5 +100,11 @@ export default class QueryBuilder {
 
     this.keyConditionExpression = (`${this.keyConditionExpression} ${keyConditionExp}`).trim()
     return this.keyConditionExpression
+  }
+
+  private setFilterExpression(attrName: string, attrValue: string, operator = '=') {
+    let filterExp = `${attrName} ${operator} ${attrValue}`
+    this.filterExpression = filterExp
+    return this.filterExpression
   }
 }
