@@ -9,6 +9,7 @@ export default class QueryBuilder {
   private filterExpression?: string
   private limitValue: number = 0
   private scanIndexForwardValue: boolean = true
+  private exclusiveStartKeyValue?: any
 
   build() {
     const result: QueryInput = {
@@ -21,6 +22,7 @@ export default class QueryBuilder {
     if (this.filterExpression) result.FilterExpression = this.filterExpression
     if (this.indexName) result.IndexName = this.indexName
     if (this.limitValue > 0) result.Limit = this.limitValue
+    if (this.exclusiveStartKeyValue) result.ExclusiveStartKey = this.exclusiveStartKeyValue
 
     return result
   }
@@ -69,6 +71,11 @@ export default class QueryBuilder {
 
   scanIndexForward(value: boolean) {
     if (typeof value === 'boolean') this.scanIndexForwardValue = value
+    return this
+  }
+
+  exclusiveStartKey(value: any) {
+    this.exclusiveStartKeyValue = value
     return this
   }
 
