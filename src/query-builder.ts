@@ -1,3 +1,5 @@
+import { QueryInput } from '@aws-sdk/client-dynamodb'
+
 export default class QueryBuilder {
   private tableName?: string
   private expressionAttributeNames: any = {}
@@ -8,7 +10,7 @@ export default class QueryBuilder {
   private scanIndexForwardValue: boolean = true
 
   build() {
-    const result = {
+    const result: QueryInput = {
       TableName: this.tableName,
       ExpressionAttributeNames: this.expressionAttributeNames,
       ExpressionAttributeValues: this.expressionAttributeValues,
