@@ -53,7 +53,7 @@ export default class QueryBuilder {
     const attributeName = this.setAttributeName(name)
     const attributeValue = this.setAttributeValue(value)
 
-    this.setFilterExpression(attributeName, attributeValue)
+    this.setFilterExpression(attributeName, attributeValue, operator)
 
     return this
   }
@@ -103,7 +103,15 @@ export default class QueryBuilder {
   }
 
   private setFilterExpression(attrName: string, attrValue: string, operator = '=') {
-    let filterExp = `${attrName} ${operator} ${attrValue}`
+    let filterExp
+    switch (operator) {
+      case 'ne':
+        filterExp = `${attrName} <> ${attrValue}`
+        break
+      default:
+        filterExp = `${attrName} ${operator} ${attrValue}`
+        break
+    }
     this.filterExpression = filterExp
     return this.filterExpression
   }
