@@ -44,6 +44,7 @@ export default class QueryBuilder {
 
   index(name: string) {
     this.indexName = name
+    return this
   }
 
   limit(value: number) {
