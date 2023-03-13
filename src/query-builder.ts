@@ -8,6 +8,7 @@ export default class QueryBuilder {
   private keyConditionExpression: string = ''
   private filterExpression?: string
   private limitValue: number = 0
+  private selectValue?: string
   private scanIndexForwardValue: boolean = true
   private exclusiveStartKeyValue?: any
 
@@ -22,6 +23,7 @@ export default class QueryBuilder {
     if (this.filterExpression) result.FilterExpression = this.filterExpression
     if (this.indexName) result.IndexName = this.indexName
     if (this.limitValue > 0) result.Limit = this.limitValue
+    if (this.selectValue) result.Select = this.selectValue
     if (this.exclusiveStartKeyValue) result.ExclusiveStartKey = this.exclusiveStartKeyValue
 
     return result
@@ -67,6 +69,11 @@ export default class QueryBuilder {
 
   limit(value: number) {
     this.limitValue = value
+  }
+
+  select(value: string) {
+    this.selectValue = value
+    return this
   }
 
   scanIndexForward(value: boolean) {
